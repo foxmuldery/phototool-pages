@@ -1,0 +1,264 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="Content-Security-Policy" 
+    content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://*.githubusercontent.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; img-src 'self' https://*.githubusercontent.com https://i.imgur.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+   
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老y照片边框工具 - 老y</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+
+        .intro {
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            line-height: 1.8;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .tools {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 改为固定的两列 */
+    gap: 2rem;
+    margin-bottom: 4rem;
+    align-items: start; /* 确保顶部对齐 */
+}
+
+/* 修改 .tool-card 的样式，统一卡片高度 */
+    .tool-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* 确保卡片高度一致 */
+    }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card h2 {
+            margin-bottom: 1rem;
+            min-height: 2em; /* 确保标题区域高度一致 */
+        }
+
+
+        .tool-card p {
+            flex-grow: 1; /* 让描述文字占据剩余空间 */
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+      /* 可以添加最大宽度限制 */
+        .preview-container {
+            width: 100%;
+            aspect-ratio: 3/2; /* 设置固定的宽高比 */
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+     /* 确保图片容器尺寸一致 */
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .preview-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        .preview-container:hover .preview-image img {
+            transform: scale(1.05);
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #2980b9;
+        }
+
+        .features {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .features h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .tool-card {
+                padding: 1.5rem;
+            }
+
+            .intro {
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
+        }
+            .footer {
+            text-align: center;
+            padding: 1rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        .social-link {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .social-link:hover {
+            color: #ff2442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>老y照片边框工具</h1>
+            <p class="subtitle">简单、优雅的照片处理工具</p>
+        </header>
+
+        <div class="intro">
+            大家好，我是老y。作为一名0编程基础的小白摄影爱好者，我一直想找一个给照片加边框的软件。结果要么电脑加边框得用heavy的软件，手机上软件很多很方便，但是还要发到手机上就麻烦。因为我每次洗出来的照片其实都是从百度网盘下载下来的。我都是在电脑上压缩并发送，或者发推/小红书的。所以想来想去，既然我的要求不高，干脆自己做了两个小工具，一个是给洗出来的添加边框外加相机/胶卷信息，一个是给任何图片添加备注文字信息。
+        </div>
+
+        <div class="tools">
+            <div class="tool-card">
+                <h2>标准版边框生成器</h2>
+                <div class="preview-container">
+                    <div class="preview-image">
+                        <!-- 这里放入标准版预览图 -->
+                        <img src="https://raw.githubusercontent.com/foxmuldery/phototool-pages/main/1.jpeg" alt="标准边框效果预览" title="带文字说明的照片边框效果">
+                    </div>
+                </div>
+                <p>为您的照片添加简洁的边框，支持自定义边框宽度、排版、字体样式和大小，让您的照片更具视觉张力。</p>
+                <a href="https://tool.foxlaoy.com/" class="button" target="_blank">立即使用</a>
+            </div>
+
+            <div class="tool-card">
+                <h2>胶片版边框生成器</h2>
+                <div class="preview-container">
+                    <div class="preview-image">
+                        <!-- 这里放入胶片版预览图 -->
+                        <img src="https://raw.githubusercontent.com/foxmuldery/phototool-pages/main/2.jpeg" alt="胶片边框效果预览" title="CONTAX TIX + KODAK ULTRAMAX 400 效果展示">
+                    </div>
+                </div>
+                <p>专为胶片摄影爱好者设计，可添加相机品牌、胶片型号等信息，完美展现复古胶片风格。（建议电脑打开）</p>
+                <a href="https://filmtool.foxlaoy.com/" class="button" target="_blank">立即使用</a>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>核心特性</h2>
+            <ul class="feature-list">
+                <li class="feature-item">🔒 本地处理，隐私安全</li>
+                <li class="feature-item">✨ 免注册，免登录，免费使用</li>
+                <li class="feature-item">✨ 简洁界面，操作便捷</li>
+                <li class="feature-item">🖼 自定义边框宽度</li>
+                <li class="feature-item">📱 支持电脑和手机使用</li>
+                <li class="feature-item">💾 批量处理功能</li>
+                <li class="feature-item">🎨 多种字体选择</li>
+                <li class="feature-item">📸 支持添加拍摄信息</li>
+            </ul>
+        </div>
+        <footer class="footer">
+            <div class="footer-content">
+                <p>
+                    开发者：老y
+                    |
+                    <a href="https://www.xiaohongshu.com/user/profile/6689f67d0000000003031352" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="social-link">
+                        小红书：老y的影像记录
+                    </a>
+                    |
+                    微信：laoyuanyingshi
+                </p>
+            </div>
+        </footer>
+    </div> <!-- 关闭 container -->
+</body>
+</html>
